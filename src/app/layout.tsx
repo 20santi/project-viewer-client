@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import {Navbar} from "./Components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <QueryClientProvider client={queryCLient}>
           <GoogleOAuthProvider clientId="183129528736-0pdjtqqj34o9olmcqhc4cql219cd6iaq.apps.googleusercontent.com">
+            <Navbar/>
             {children}
             <Toaster />
             <ReactQueryDevtools/>
