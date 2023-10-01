@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { PiProjectorScreenChartFill } from "react-icons/pi";
 import { useCurrentUser } from "../hooks/user";
 import Link from "next/link";
 import { FaHome, FaHashtag, FaBell, FaBookmark, FaUser } from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface TwitterSidebarButton {
   title: string;
@@ -13,6 +14,13 @@ interface TwitterSidebarButton {
 
 export const Navbar: React.FC = () => {
   const { user } = useCurrentUser();
+  const pathname = usePathname();
+  const searchParam = useSearchParams();
+
+  const matchUrl = (url: string) => {
+    if (url === pathname) return true;
+    else return false;
+  };
 
   const sidebarMenuItems: TwitterSidebarButton[] = useMemo(
     () => [
@@ -24,22 +32,22 @@ export const Navbar: React.FC = () => {
       {
         title: "Explore",
         icon: <FaHashtag />,
-        link: "/",
+        link: "",
       },
       {
         title: "Notifications",
         icon: <FaBell />,
-        link: "/",
+        link: "",
       },
       {
         title: "Messages",
         icon: <FaMessage />,
-        link: "/",
+        link: "",
       },
       {
         title: "Bookmarks",
         icon: <FaBookmark />,
-        link: "/",
+        link: "",
       },
       {
         title: "Profile",
@@ -59,8 +67,18 @@ export const Navbar: React.FC = () => {
           </div>
           <ul className="flex space-x-10">
             {sidebarMenuItems.map((item, index) => (
-              <li key={index} className=" text-gray-500 hover:text-black hover:border-b-2 border-black">
-                <Link href={item.link} className="flex flex-col gap-y-2 items-center justify-center">
+              <li
+                key={index}
+                className={`${
+                  matchUrl(item.link)
+                    ? "text-black border-b-2 border-black"
+                    : "text-gray-500"
+                } hover:text-black hover:border-b-2 border-black`}
+              >
+                <Link
+                  href={item.link}
+                  className="flex flex-col gap-y-2 items-center justify-center"
+                >
                   <div className="text-2xl">{item.icon}</div>
                   <span className="text-[12px]">{item.title}</span>
                 </Link>

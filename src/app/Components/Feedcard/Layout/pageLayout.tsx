@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { BsBell, BsBookmark, BsEnvelope } from "react-icons/bs";
+import { BsBell, BsBookmark, BsEnvelope, BsSearch } from "react-icons/bs";
 import { BiHash, BiHomeCircle, BiUser } from "react-icons/bi";
 import Image from "next/image";
 import { useCurrentUser } from "../../../hooks/user";
@@ -84,7 +84,7 @@ const TwitterLayout: React.FC<TweeterLayoutProps> = (props) => {
   );
 
   return (
-    <div className="h-screen w-screen mt-12 overflow-hidden scroll-m-32 bg-[#f3f2ef] text-black relative">
+    <div className="h-screen w-screen mt-12 overflow-hidden bg-[#f3f2ef] text-black relative">
       <div className="w-[90%] h-full mx-auto pt-7 sm:flex">
         <div
           id="1"
@@ -114,7 +114,7 @@ const TwitterLayout: React.FC<TweeterLayoutProps> = (props) => {
         </div>
         <div
           id="2"
-          className="ml-60 h-screen overflow-y-scroll scrollbar-none border-gray-900"
+          className="ml-52 h-screen overflow-y-scroll scrollbar-none border-gray-900"
         >
           {props.children}
         </div>
