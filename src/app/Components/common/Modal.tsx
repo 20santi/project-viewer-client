@@ -1,7 +1,13 @@
+import { graphQLClient } from "@/app/clients/api";
+import { getSignedURLForTweetQuery } from "@/app/graphql/Queries/tweet";
 import { useCreateTweet } from "@/app/hooks/tweet";
 import { useCurrentUser } from "@/app/hooks/user";
+import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import React, { useCallback, useState } from "react";
 import { BiImageAlt } from "react-icons/bi";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Image from "next/image";
 
 interface ModalProps {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -9,23 +15,58 @@ interface ModalProps {
 
 export const Modal = ({ setModal }: ModalProps) => {
   const [content, setContent] = useState("");
+  const [imageURL, setImageURL] = useState("");
   const { user } = useCurrentUser();
   const { mutate } = useCreateTweet();
+
+  const handleInputChangeFile = useCallback((input: HTMLInputElement) => {
+    return async (event: Event) => {
+      event.preventDefault();
+      const file: File | null | undefined = input.files?.item(0);
+      if (!file) return;
+
+      const { getSignedURLForTweet } = await graphQLClient.request(
+        getSignedURLForTweetQuery as TypedDocumentNode,
+        {
+          imageName: file.name,
+          imageType: file.type.split("/")[1],
+        }
+      );
+
+      if (getSignedURLForTweet) {
+        toast.loading("Uploading...", { id: "2" });
+        await axios.put(getSignedURLForTweet, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
+        });
+        toast.success("Upload complete", { id: "2" });
+        const url = new URL(getSignedURLForTweet);
+        const myFIlePath = `${url.origin}${url.pathname}`;
+        setImageURL(myFIlePath);
+      }
+    };
+  }, []);
 
   const handleSelectImage = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
+
+    const handleFn = handleInputChangeFile(input);
+
+    input.addEventListener("change", handleFn);
+
     input.click();
-  }, []);
+  }, [handleInputChangeFile]);
 
   const handleCreateTweet = useCallback(async () => {
     await mutate({
       content,
-      imageURL: user?.profileImageURL,
+      imageURL,
     });
     setModal(false);
-  }, [content, mutate]);
+  }, [content, mutate, imageURL]);
 
   return (
     <div className="fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-black bg-opacity-60 backdrop-blur-sm">
@@ -41,6 +82,15 @@ export const Modal = ({ setModal }: ModalProps) => {
                 placeholder="Project Title"
                 rows={3}
               ></textarea>
+              {imageURL && (
+                <Image
+                  src={imageURL}
+                  alt="project-image"
+                  height={300}
+                  width={300}
+                  className="rounded-lg"
+                />
+              )}
             </div>
             <div className="flex flex-col gap-y-2">
               <p className="text-xl font-bold">Project Description</p>

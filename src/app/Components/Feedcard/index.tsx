@@ -11,15 +11,16 @@ interface FeedCardProps {
 
 const FeedCard: React.FC<FeedCardProps> = (props) => {
   const { data } = props;
-  
+
   return (
     <div className="border border-slate-300 rounded-xl bg-white p-5 transition-all cursor-pointer">
       <div className="flex flex-col">
-        <div className="flex gap-x-2 items-center min-w-[600px]">
-          <div>
+        <div className="flex gap-x-2 min-w-[600px]">
+          <div className="w-[10%]">
             {data.author?.profileImageURL && (
               <Image
                 src={data.author?.profileImageURL}
+                priority={true}
                 alt="user-image"
                 height={50}
                 width={50}
@@ -27,30 +28,32 @@ const FeedCard: React.FC<FeedCardProps> = (props) => {
               />
             )}
           </div>
-          <div className="">
+          <div className="flex flex-col gap-y-2 w-[88%]">
             <h5 className="font-bold">
               <Link href={`/${data.author?.id}`}>
-              {data.author?.firstName} {data.author?.lastName}
+                {data.author?.firstName} {data.author?.lastName}
               </Link>
             </h5>
             <p className="text-slate-500 text-[14px]">{data.content}</p>
+            <div className="flex w-full">
+            {data.imageURL && (
+              <Image
+                src={data.imageURL}
+                priority={true}
+                alt="tweet-image"
+                width={400}
+                height={400}
+              />
+            )}
+            </div>
+            <div className="flex justify-between mt-5 text-xl items-center w-full">
+              <BiLike />
+              <BiRepost />
+              <FaRegCommentDots />
+              <BiBarChart />
+              <BiUpload />
+            </div>
           </div>
-        </div>
-        <div className="w-full mt-5 ml-7">
-          <Image
-            src="https://res.cloudinary.com/dxyfqzmew/image/upload/v1696078234/Image/pcb0ny76uedij1kdzia7.webp"
-            alt="project-image"
-            height={500}
-            width={500}
-            className="rounded-xl"
-          />
-        </div>
-        <div className="flex justify-between mt-5 text-xl items-center pl-7 pr-7">
-          <BiLike />
-          <BiRepost />
-          <FaRegCommentDots />
-          <BiBarChart />
-          <BiUpload />
         </div>
       </div>
     </div>

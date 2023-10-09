@@ -62,6 +62,8 @@ const TwitterLayout: React.FC<TweeterLayoutProps> = (props) => {
   const handleLoginWithGoogle = useCallback(
     async (cred: CredentialResponse) => {
       const googleToken = cred.credential;
+      console.log("token: ", googleToken);
+
       if (!googleToken) {
         return toast.error(`Google token not found`);
       }
@@ -72,7 +74,7 @@ const TwitterLayout: React.FC<TweeterLayoutProps> = (props) => {
         });
 
       toast.success("Verified Successfully");
-      console.log("token: ", verifyGoogleToken);
+      console.log("token:------------- ", verifyGoogleToken);
 
       if (verifyGoogleToken) {
         window.localStorage.setItem("__token", verifyGoogleToken);
