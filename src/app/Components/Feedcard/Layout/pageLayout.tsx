@@ -74,7 +74,6 @@ const TwitterLayout: React.FC<TweeterLayoutProps> = (props) => {
         });
 
       toast.success("Verified Successfully");
-      console.log("token:------------- ", verifyGoogleToken);
 
       if (verifyGoogleToken) {
         window.localStorage.setItem("__token", verifyGoogleToken);

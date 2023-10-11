@@ -19,7 +19,6 @@ const UserProfilePage: NextPage = () => {
   const { user } = useGetuserById(id);
   const { user: currentUser } = useCurrentUser();
   const queryClient = useQueryClient();
-  console.log("user: ", user);
 
   const amIFollowing = useMemo(() => {
     if (!user) return false;

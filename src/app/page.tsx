@@ -13,6 +13,7 @@ export default function Home() {
   const { user } = useCurrentUser();
   const [modal, setModal] = useState(false);
   const { tweets = [] } = useGetAllTweets();
+  console.log("User:-------->>>>>>>>>>>>>> ", user);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#f3f2ef] text-black relative">
